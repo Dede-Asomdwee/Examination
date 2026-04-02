@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>My Dream House</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <script src="scripts/aframe.min.js"></script>
+  <script src="scripts/ada-water.js"></script>
+  
+  <style>
+    .student-info {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      font-family: 'Arial', sans-serif;
+      font-size: 16px;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .student-info:hover {
+      background: rgba(0, 0, 0, 0.9);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .student-name {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: #4CAF50;
+    }
+    
+    .student-index {
+      font-size: 14px;
+      color: #E3F2FD;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+  
+</head>
+<body>
+<a-scene>
+  
+<a-assets>
+    
+    <img id="grass" src="textures/grass.png" alt="">
+    <img id="sky" 
+    src="textures/sunny-sky.png"
+alt="">
+
+
+
+
+
+</a-assets>
+
+
+
+<!-- camera position -->
+<a-entity position="9 4 23">
+  <a-camera></a-camera>
+</a-entity>
+
+
+
+
+
+
+
+<a-sky src="#sky" 
+background-repeat="no-repeat"
+rotation="0 64 0"></a-sky>
+
+<a-plane material="src: #grass;
+repeat: 1 1" 
+ rotation="-90 0 0" 
+ scale="10000 10000 1" 
+ geometry=""></a-plane>
+            
+<a-gltf-model 
+id="house" position="0 0 0"
+scale="1 1 1"
+ src="3DModels/model/mm/scene.gltf"></a-gltf-model>
+
+
+ 
+ 
+ <a-gltf-model id="pool" 
+ position="22.28631 -0.42242 -14.85678" 
+ scale="5 5 6" 
+ src="swimming_pool/scene.gltf" 
+ gltf-model="swimming_pool/scene.gltf"></a-gltf-model>
+
+
+
+ <a-water opacity="40"
+  side="double" 
+  width="2.1"
+  base-color="lightblue" 
+  foam-color="blue" 
+  repeat="2" 
+  voronoi-points="5" 
+  rotation="90 0 0" 
+  position="22.335 0.200 -14.757" 
+  scale="2.6 1.2 1.0" 
+  animation="property: scale; dur: 50; loop: true; dir: alternate; easing: easeOutElastic" 
+  material="shader: water; transparent: true; repeat: 100 1; map: [object Object]; basecolor: lightblue" 
+ >
+</a-water>
+
+
+
+
+</a-scene>
+
+<script>
+  // Water animation
+  document.querySelector("a-water").setAttribute("animation", {
+    property: "scale",
+    dur: 50,
+    loop: true,
+    dir: "alternate",
+    easing: "easeOutElastic",
+  });
+
+  // Modify colors when house model loads
+  const houseModel = document.querySelector("#house");
+  
+  houseModel.addEventListener("model-loaded", function() {
+    const scene = houseModel.object3D;
+    
+    scene.traverse(function(child) {
+      if (child.isMesh && child.material) {
+        const name = child.name.toLowerCase();
+        
+        // Coconut trees fronds - Deep Green
+        if (name.includes("frond") || name.includes("leaf") || name.includes("coconut")) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach(mat => mat.color.setHex(0x1B5E20));
+          } else {
+            child.material.color.setHex(0x1B5E20);
+          }
+        }
+        // Black car - Purple
+        else if (name.includes("car") || name.includes("vehicle")) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach(mat => mat.color.setHex(0x9932CC));
+          } else {
+            child.material.color.setHex(0x9932CC);
+          }
+        }
+        // Bike - Light Black
+        else if (name.includes("bike") || name.includes("bicycle")) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach(mat => mat.color.setHex(0x404040));
+          } else {
+            child.material.color.setHex(0x404040);
+          }
+        }
+        // House - Grey Color
+        else if (name.includes("house") || name.includes("wall") || name.includes("roof") || 
+                 name.includes("structure") || name.includes("building")) {
+          if (Array.isArray(child.material)) {
+            child.material.forEach(mat => mat.color.setHex(0x808080));
+          } else {
+            child.material.color.setHex(0x808080);
+          }
+        }
+      }
+    });
+  });
+</script>
+
+
+</body>
+
+<!-- Student Information Overlay -->
+<div class="student-info">
+  <div class="student-name">Hannah Asomdwee</div>
+  <div class="student-index">FCM.41.020.034.24</div>
+</div>
+
+</html>
